@@ -128,7 +128,7 @@
   
   <!-- ListView style to be used for main menu -->
   <DataTemplate x:Key="SubMenuItemDataTemplate">
-    <Image VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Stretch="UniformToFill" Margin="5">
+    <Image VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Stretch="Uniform" Margin="5">
       <!--Image.Opacity>
         <MultiBinding Converter="{StaticResource ExpressionMultiValueConverter}" ConverterParameter="{}{0} ? {1} : {2}">
           <Binding RelativeSource="{RelativeSource Mode=FindAncestor,AncestorType={x:Type Button}}" Path="HasFocus"/>
@@ -143,6 +143,13 @@
           <Binding Source="{Binding Converter={StaticResource ListItemActionIdConverter}, ConverterParameter=nofocus.png}"/>
         </MultiBinding>
       </Image.Source>
+      <Image.Width>
+        <MultiBinding Converter="{StaticResource ExpressionMultiValueConverter}" ConverterParameter="{}{0} ? {1} : {2}">
+          <Binding RelativeSource="{RelativeSource Mode=FindAncestor,AncestorType={x:Type Button}}" Path="HasFocus"/>
+          <Binding Source="258"/>
+          <Binding Source="162"/>
+        </MultiBinding>
+      </Image.Width>
     </Image>
   </DataTemplate>
 
