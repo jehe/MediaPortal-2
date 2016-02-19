@@ -16,7 +16,7 @@
 
   <!-- default brush used to paint the background of a page/window -->
   <ResourceWrapper x:Key="BackgroundBrush">
-    <ImageBrush x:Name="BackdropImageBackground" ImageSource="darkBackground.jpg" />
+    <ImageBrush x:Name="BackdropImageBackground" ImageSource="Background.png" />
   </ResourceWrapper>
 
   <Style x:Key="AutoCenterScrollViewerStyle" TargetType="{x:Type ScrollViewer}">
@@ -128,15 +128,21 @@
   
   <!-- ListView style to be used for main menu -->
   <DataTemplate x:Key="SubMenuItemDataTemplate">
-    <Image VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Stretch="UniformToFill" Margin="5"
-               Source="{Binding Converter={StaticResource ListItemActionIdConverter}, ConverterParameter=.jpg}">
-      <Image.Opacity>
+    <Image VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Stretch="UniformToFill" Margin="5">
+      <!--Image.Opacity>
         <MultiBinding Converter="{StaticResource ExpressionMultiValueConverter}" ConverterParameter="{}{0} ? {1} : {2}">
           <Binding RelativeSource="{RelativeSource Mode=FindAncestor,AncestorType={x:Type Button}}" Path="HasFocus"/>
           <Binding Source="1.0"/>
           <Binding Source="0.4"/>
         </MultiBinding>
-      </Image.Opacity>
+      </Image.Opacity-->
+       <Image.Source>
+        <MultiBinding Converter="{StaticResource ExpressionMultiValueConverter}" ConverterParameter="{}{0} ? {1} : {2}">
+          <Binding RelativeSource="{RelativeSource Mode=FindAncestor,AncestorType={x:Type Button}}" Path="HasFocus"/>
+          <Binding Source="{Binding Converter={StaticResource ListItemActionIdConverter}, ConverterParameter=focus.png}"/>
+          <Binding Source="{Binding Converter={StaticResource ListItemActionIdConverter}, ConverterParameter=nofocus.png}"/>
+        </MultiBinding>
+      </Image.Source>
     </Image>
   </DataTemplate>
 
