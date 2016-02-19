@@ -5,7 +5,7 @@
     >
 
   <ResourceWrapper x:Key="MenuTextForeground" Resource="White"/>
-  <ResourceWrapper x:Key="MenuTextBackground" Resource="#FF336699"/>
+  <ResourceWrapper x:Key="MenuTextBackground" Resource="#FF4b76a0"/>
     
   <!-- ************************** Black theme colors ****************************** -->
 
