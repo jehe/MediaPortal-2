@@ -35,13 +35,27 @@ using MediaPortal.UI.Presentation.Workflow;
 using MediaPortal.UI.SkinEngine.MpfElements;
 using MediaPortal.Utilities;
 using MediaPortal.Utilities.Events;
+using MediaPortal.Common.Settings;
+using HomeEditor.Settings;
+using System.Collections.Generic;
+using HomeEditor.Groups;
+using MediaPortal.Common.Services.Settings;
+using MediaPortal.Common.Localization;
 
 namespace MediaPortal.UiComponents.RisingSkin.Models
 {
   public class HomeMenuModel : MenuModel
   {
+    protected const string KEY_ITEM_SUB_ITEMS = "HomeMenuModel: SubItems";
     private readonly DelayedEvent _delayedMenueUpdateEvent;
     private NavigationList<ListItem> _navigationList;
+    
+    protected List<HomeMenuGroup> _groups;
+    protected List<ListItem> _groupItems;
+    protected HashSet<Guid> _groupedActions;
+    protected bool _refreshNeeded;
+    protected SettingsChangeWatcher<HomeEditorSettings> _settings;
+
     public ItemsList NestedMenuItems { get; private set; }
     public ItemsList SubItems { get; private set; }
 
@@ -61,30 +75,80 @@ namespace MediaPortal.UiComponents.RisingSkin.Models
       SetSubItems(item);
     }
 
+    protected void LoadGroupsFromSettings()
+    {
+      var settingsGroups = _settings.Settings.Groups;
+      _groups = new List<HomeMenuGroup>();
+      if (settingsGroups != null && settingsGroups.Count > 0)
+        _groups.AddRange(settingsGroups);
+      else
+        _groups.AddRange(DefaultGroups.Create());
+    }
+
+    protected void RecreateGroupItems()
+    {
+      if (_groups != null && !_refreshNeeded)
+        return;
+      _refreshNeeded = false;
+
+      LoadGroupsFromSettings();
+      var actions = ServiceRegistration.Get<IWorkflowManager>().MenuStateActions;
+
+      _groupItems.Clear();
+      _groupedActions.Clear();
+      foreach (HomeMenuGroup group in _groups)
+      {
+        CollectionUtils.AddAll(_groupedActions, group.Actions.Select(a => a.ActionId));
+        ListItem item = new ListItem(Consts.KEY_NAME, group.DisplayName);
+        item.AdditionalProperties[KEY_ITEM_SUB_ITEMS] = CreateSubItems(group, actions);
+        _groupItems.Add(item);
+      }
+
+      //Entry for all actions without a group
+      ListItem extrasItem = new ListItem(Consts.KEY_NAME, LocalizationHelper.CreateResourceString(_settings.Settings.OthersGroupName));
+      _groupItems.Add(extrasItem);
+    }
+
+    protected List<ListItem> CreateSubItems(HomeMenuGroup group, IDictionary<Guid, WorkflowAction> actions)
+    {
+      List<ListItem> items = new List<ListItem>();
+      foreach (var groupAction in group.Actions)
+      {
+        WorkflowAction workflowAction;
+        if (actions.TryGetValue(groupAction.ActionId, out workflowAction))
+        {
+          var listItem = new ListItem(Consts.KEY_NAME, groupAction.DisplayName);
+          listItem.AdditionalProperties[Consts.KEY_ITEM_ACTION] = workflowAction;
+          listItem.Command = new MethodDelegateCommand(() => workflowAction.Execute());
+          items.Add(listItem);
+        }
+      }
+      return items;
+    }
+
     private void SetSubItems(ListItem item)
     {
       if (item != null)
       {
         SubItems.Clear();
-        // Add self reference
-        SubItems.Add(item);
-        object oAction;
-        if (item.AdditionalProperties.TryGetValue(Consts.KEY_ITEM_ACTION, out oAction))
+        object oSubItems;
+        if (item.AdditionalProperties.TryGetValue(KEY_ITEM_SUB_ITEMS, out oSubItems))
         {
-          PushNavigationTransition wfAction = oAction as PushNavigationTransition;
-          if (wfAction != null)
+          IEnumerable<ListItem> subItems = oSubItems as IEnumerable<ListItem>;
+          if (subItems != null)
+            CollectionUtils.AddAll(SubItems, subItems);
+        }
+        else
+        {
+          //Get items without a group
+          foreach (var menuItem in MenuItems)
           {
-            var wf = ServiceRegistration.Get<IWorkflowManager>();
-            foreach (var workflowAction in wf.MenuStateActions.Values)
+            object oAction;
+            if (menuItem.AdditionalProperties.TryGetValue(Consts.KEY_ITEM_ACTION, out oAction))
             {
-              if (workflowAction.SourceStateIds != null && workflowAction.SourceStateIds.Contains(wfAction.TargetStateId))
-              {
-                var action = workflowAction;
-                var listItem = new ListItem(Consts.KEY_NAME, action.DisplayTitle);
-                listItem.AdditionalProperties[Consts.KEY_ITEM_ACTION] = action;
-                listItem.Command = new MethodDelegateCommand(() => action.Execute());
-                SubItems.Add(listItem);
-              }
+              WorkflowAction action = oAction as WorkflowAction;
+              if (action != null && !_groupedActions.Contains(action.ActionId))
+                SubItems.Add(menuItem);
             }
           }
         }
@@ -100,15 +164,24 @@ namespace MediaPortal.UiComponents.RisingSkin.Models
     public HomeMenuModel()
     {
       _navigationList = new NavigationList<ListItem>();
+      _groupItems = new List<ListItem>();
+      _groupedActions = new HashSet<Guid>();
       NestedMenuItems = new ItemsList();
       SubItems = new ItemsList();
 
+      _settings = new SettingsChangeWatcher<HomeEditorSettings>();
+      _settings.SettingsChanged += OnSettingsChanged;
       SubscribeToMessages();
 
       _delayedMenueUpdateEvent = new DelayedEvent(200); // Update menu items only if no more requests are following after 200 ms
       _delayedMenueUpdateEvent.OnEventHandler += ReCreateMenuItems;
 
       _navigationList.OnCurrentChanged += SetSelection;
+    }
+
+    private void OnSettingsChanged(object sender, EventArgs e)
+    {
+      _refreshNeeded = true;
     }
 
     private void ReCreateMenuItems(object sender, EventArgs e)
@@ -121,9 +194,10 @@ namespace MediaPortal.UiComponents.RisingSkin.Models
       // Get new menu entries from base list
       if (recreateList)
       {
+        RecreateGroupItems();
         var previousSelected = _navigationList.Current;
         _navigationList.Clear();
-        CollectionUtils.AddAll(_navigationList, MenuItems);
+        CollectionUtils.AddAll(_navigationList, _groupItems);
         if (!_navigationList.MoveTo(i => i == previousSelected))
           _navigationList.CurrentIndex = 0;
       }
