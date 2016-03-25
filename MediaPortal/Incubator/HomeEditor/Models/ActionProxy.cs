@@ -9,6 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using MediaPortal.Common.General;
+using MediaPortal.Utilities;
 
 namespace HomeEditor.Models
 {
@@ -68,12 +69,14 @@ namespace HomeEditor.Models
     {
       var wf = ServiceRegistration.Get<IWorkflowManager>();
       List<WorkflowAction> actions = new List<WorkflowAction>(wf.MenuStateActions.Values);
+      SortedList<string, ListItem> sortedActionItems = new SortedList<string, ListItem>();
+      AddSubItems(HOME_STATE_ID, actions, sortedActionItems, true);
       _actionItems.Clear();
-      AddSubItems(HOME_STATE_ID, actions, _actionItems, true);
+      CollectionUtils.AddAll(_actionItems, sortedActionItems.Values);
       _actionItems.FireChange();
     }
 
-    protected void AddSubItems(Guid targetStateId, List<WorkflowAction> actions, ItemsList items, bool allowNullSource)
+    protected void AddSubItems(Guid targetStateId, List<WorkflowAction> actions, SortedList<string, ListItem> items, bool allowNullSource)
     {
       Guid currentActionId = ActionId;
       for (int i = 0; i < actions.Count; i++)
@@ -87,10 +90,7 @@ namespace HomeEditor.Models
         if (action.ActionId == currentActionId)
           item.Selected = true;
         item.SelectedProperty.Attach(OnActionItemSelected);
-        items.Add(item);
-        PushNavigationTransition navigation = action as PushNavigationTransition;
-        if (navigation != null)
-          AddSubItems(navigation.TargetStateId, actions, items, false);
+        items.Add(action.DisplayTitle.Evaluate(), item);
       }
     }
 
