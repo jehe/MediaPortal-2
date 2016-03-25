@@ -187,6 +187,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Content>
+    <Content Include="Skin\RisingSkin\workflow\wmc-actions.xml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Skin\RisingSkin\themes\Silver\styles\Consts.xaml">

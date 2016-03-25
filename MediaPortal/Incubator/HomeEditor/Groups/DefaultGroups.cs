@@ -45,10 +45,10 @@ namespace HomeEditor.Groups
           Actions = new List<HomeMenuAction>
           {
             new HomeMenuAction("[SlimTvClient.Main]", new Guid("b4a9199f-6dd4-4bda-a077-de9c081f7703")),
-            new HomeMenuAction("[SlimTvClient.TvGuide]", new Guid("fa056ded-1122-42bd-a3de-cb6cf2a59c66")),
-            new HomeMenuAction("[SlimTvClient.Schedules]", new Guid("de81847f-5736-4331-970c-b4f65b57b2f1")),
-            new HomeMenuAction("[SlimTvClient.RecordingsMenuItem]", new Guid("e6ab0765-6671-480f-9c9f-a517ce04934a")),
-            new HomeMenuAction("[SlimTvClient.ProgramSearch]", new Guid("6cc60a38-08e3-4b7e-bedd-964e5c1175e5"))
+            new HomeMenuAction("[SlimTvClient.TvGuide]", new Guid("a298dfbe-9da8-4c16-a3ea-a9b354f3910c")),
+            new HomeMenuAction("[SlimTvClient.Schedules]", new Guid("87355e05-a15b-452a-85b8-98d4fc80034e")),
+            new HomeMenuAction("[SlimTvClient.RecordingsMenuItem]", new Guid("7f52d0a1-b7f8-46a1-a56b-1110bbfb7d51")),
+            new HomeMenuAction("[SlimTvClient.ProgramSearch]", new Guid("d91738e9-3f85-443b-abbd-ef01731734ad"))
           }
         },
         new HomeMenuGroup("[News.Title]", new Guid("f41d7acb-ea54-42d3-993c-e9770762931f"))
