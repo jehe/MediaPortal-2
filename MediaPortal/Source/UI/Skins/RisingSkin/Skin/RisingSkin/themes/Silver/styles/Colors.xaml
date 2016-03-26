@@ -172,10 +172,16 @@
   <ResourceWrapper x:Key="VirtualKeyboardBorderColor" Resource="DarkGray"/>
 
   <!-- White, a bit transparent -->
-  <ResourceWrapper x:Key="ContentGroupBoxBorderColor" Resource="#88FFFFFF"/>
+  <ResourceWrapper x:Key="ContentGroupBoxBorderColor" Resource="Transparent"/>
+  <ResourceWrapper x:Key="ContentGroupBoxBackgroundColor" Resource="Transparent"/>
+  <ResourceWrapper x:Key="ContentGroupBoxHeaderColor" Resource="Transparent"/>
+  <ResourceWrapper x:Key="ContentGroupBoxBackgroundGradient1Color" Value="Transparent"/>
+  <ResourceWrapper x:Key="ContentGroupBoxBackgroundGradient2Color" Value="Transparent"/>
+  <ResourceWrapper x:Key="ContentGroupBoxBackgroundGradient3Color" Value="Transparent"/>
 
-  <!-- Black, a bit transparent -->
-  <ResourceWrapper x:Key="ContentGroupBoxBackgroundColor" Resource="#88000000"/>
+  <ResourceWrapper x:Key="HeaderPanelBackgroundGradient1Color" Value="Transparent"/>
+  <ResourceWrapper x:Key="HeaderPanelBackgroundGradient2Color" Value="Transparent"/>
+  <ResourceWrapper x:Key="HeaderPanelBackgroundGradient3Color" Value="Transparent"/>
 
   <!-- Light green -->
   <ResourceWrapper x:Key="AnalogClockHandColor" Resource="#FFF0F0F0"/>
