@@ -16,6 +16,10 @@ namespace HomeEditor.Models
   public class ActionProxy
   {
     public static readonly Guid HOME_STATE_ID = new Guid("7F702D9C-F2DD-42da-9ED8-0BA92F07787F");
+    //actions that should only be displayed on supported skins register with this source state
+    public static readonly Guid CUSTOM_HOME_STATE_ID = new Guid("B285DC02-AA8C-47F2-8795-0B13B6E66306");
+
+    protected static readonly List<Guid> SOURCE_STATES = new List<Guid> { HOME_STATE_ID, CUSTOM_HOME_STATE_ID };
 
     protected AbstractProperty _displayNameProperty = new WProperty(typeof(string), null);
     protected AbstractProperty _actionIdProperty = new WProperty(typeof(Guid), Guid.Empty);
@@ -70,19 +74,20 @@ namespace HomeEditor.Models
       var wf = ServiceRegistration.Get<IWorkflowManager>();
       List<WorkflowAction> actions = new List<WorkflowAction>(wf.MenuStateActions.Values);
       SortedList<string, ListItem> sortedActionItems = new SortedList<string, ListItem>();
-      AddSubItems(HOME_STATE_ID, actions, sortedActionItems, true);
+      AddActionItems(SOURCE_STATES, actions, sortedActionItems, true);
+
       _actionItems.Clear();
       CollectionUtils.AddAll(_actionItems, sortedActionItems.Values);
       _actionItems.FireChange();
     }
 
-    protected void AddSubItems(Guid targetStateId, List<WorkflowAction> actions, SortedList<string, ListItem> items, bool allowNullSource)
+    protected void AddActionItems(ICollection<Guid> sourceStateIds, List<WorkflowAction> actions, SortedList<string, ListItem> items, bool allowNullSource)
     {
       Guid currentActionId = ActionId;
       for (int i = 0; i < actions.Count; i++)
       {
         WorkflowAction action = actions[i];
-        if (!IsActionValid(action, targetStateId, allowNullSource))
+        if (!IsActionValid(action, sourceStateIds, allowNullSource))
           continue;
 
         ListItem item = new ListItem(Consts.KEY_NAME, action.DisplayTitle ?? action.HelpText);
@@ -94,13 +99,13 @@ namespace HomeEditor.Models
       }
     }
 
-    protected bool IsActionValid(WorkflowAction action, Guid targetStateId, bool allowNullSource)
+    protected bool IsActionValid(WorkflowAction action, ICollection<Guid> sourceStateIds, bool allowNullSource)
     {
       if (action.DisplayTitle == null || string.IsNullOrEmpty(action.DisplayTitle.Evaluate()))
         return false;
       if (action.SourceStateIds == null)
         return allowNullSource;
-      return action.SourceStateIds.Contains(targetStateId);
+      return action.SourceStateIds.Intersect(sourceStateIds).Count() > 0;
     }
 
     protected void OnActionItemSelected(AbstractProperty property, object oldValue)
