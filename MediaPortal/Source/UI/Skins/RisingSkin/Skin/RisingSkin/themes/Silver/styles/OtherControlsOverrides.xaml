@@ -211,29 +211,91 @@
   
   <!-- ListView style to be used for main menu -->
   <DataTemplate x:Key="SubMenuItemDataTemplate">
-    <Image VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Stretch="Uniform" Margin="5">
-      <!--Image.Opacity>
-        <MultiBinding Converter="{StaticResource ExpressionMultiValueConverter}" ConverterParameter="{}{0} ? {1} : {2}">
-          <Binding RelativeSource="{RelativeSource Mode=FindAncestor,AncestorType={x:Type Button}}" Path="HasFocus"/>
-          <Binding Source="1.0"/>
-          <Binding Source="0.4"/>
-        </MultiBinding>
-      </Image.Opacity-->
-       <Image.Source>
-        <MultiBinding Converter="{StaticResource ExpressionMultiValueConverter}" ConverterParameter="{}{0} ? {1} : {2}">
-          <Binding RelativeSource="{RelativeSource Mode=FindAncestor,AncestorType={x:Type Button}}" Path="HasFocus"/>
-          <Binding Source="{Binding Converter={StaticResource ListItemActionIdConverter}, ConverterParameter=focus.png}"/>
-          <Binding Source="{Binding Converter={StaticResource ListItemActionIdConverter}, ConverterParameter=nofocus.png}"/>
-        </MultiBinding>
-      </Image.Source>
-      <Image.Width>
-        <MultiBinding Converter="{StaticResource ExpressionMultiValueConverter}" ConverterParameter="{}{0} ? {1} : {2}">
-          <Binding RelativeSource="{RelativeSource Mode=FindAncestor,AncestorType={x:Type Button}}" Path="HasFocus"/>
-          <Binding Source="258"/>
-          <Binding Source="162"/>
-        </MultiBinding>
-      </Image.Width>
-    </Image>
+    <DataTemplate.Resources>
+      <Storyboard x:Key="MoveRight" FillBehavior="HoldEnd">
+        <DoubleAnimationUsingKeyFrames BeginTime="00:00:00" FillBehavior="HoldEnd" Storyboard.TargetName="Bling_horizontal" Storyboard.TargetProperty="RenderTransform.X">
+          <SplineDoubleKeyFrame KeyTime="00:00:00.500" Value="-200"/>
+          <SplineDoubleKeyFrame KeyTime="00:00:02.500" Value="20"/>
+        </DoubleAnimationUsingKeyFrames>
+        <DoubleAnimationUsingKeyFrames BeginTime="00:00:00" FillBehavior="HoldEnd" Storyboard.TargetName="Bling_horizontal" Storyboard.TargetProperty="Opacity">
+          <SplineDoubleKeyFrame KeyTime="00:00:00.000" Value="0"/>
+          <SplineDoubleKeyFrame KeyTime="00:00:00.500" Value="0"/>
+          <SplineDoubleKeyFrame KeyTime="00:00:01.000" Value="0.8"/>
+          <SplineDoubleKeyFrame KeyTime="00:00:02.050" Value="0.8"/>
+          <SplineDoubleKeyFrame KeyTime="00:00:02.501" Value="0"/>
+        </DoubleAnimationUsingKeyFrames>
+      </Storyboard>
+      <Storyboard x:Key="MoveDown" FillBehavior="HoldEnd">
+        <DoubleAnimationUsingKeyFrames BeginTime="00:00:00" FillBehavior="HoldEnd" Storyboard.TargetName="Bling_vertical" Storyboard.TargetProperty="RenderTransform.Y">
+          <SplineDoubleKeyFrame KeyTime="00:00:02.200" Value="-10"/>
+          <SplineDoubleKeyFrame KeyTime="00:00:04.000" Value="80"/>
+        </DoubleAnimationUsingKeyFrames>
+        <DoubleAnimationUsingKeyFrames BeginTime="00:00:00" FillBehavior="HoldEnd" Storyboard.TargetName="Bling_vertical" Storyboard.TargetProperty="Opacity">
+          <SplineDoubleKeyFrame KeyTime="00:00:00.000" Value="0"/>
+          <SplineDoubleKeyFrame KeyTime="00:00:02.050" Value="0"/>
+          <SplineDoubleKeyFrame KeyTime="00:00:03.450" Value="0.8"/>
+          <SplineDoubleKeyFrame KeyTime="00:00:04.000" Value="0"/>
+        </DoubleAnimationUsingKeyFrames>
+      </Storyboard>
+    </DataTemplate.Resources>
+    <Grid x:Name="ItemControl">
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="*"/>
+      </Grid.ColumnDefinitions>
+      <Grid.RowDefinitions>
+        <RowDefinition Height="*"/>
+      </Grid.RowDefinitions>
+      <Image VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Stretch="Uniform" Margin="5" Grid.Row="0" Grid.Column="0">
+        <Image.Source>
+          <MultiBinding Converter="{StaticResource ExpressionMultiValueConverter}" ConverterParameter="{}{0} ? {1} : {2}">
+            <Binding RelativeSource="{RelativeSource Mode=FindAncestor,AncestorType={x:Type Button}}" Path="HasFocus"/>
+            <Binding Source="{Binding Converter={StaticResource ListItemActionIdConverter}, ConverterParameter=focus.png}"/>
+            <Binding Source="{Binding Converter={StaticResource ListItemActionIdConverter}, ConverterParameter=nofocus.png}"/>
+          </MultiBinding>
+        </Image.Source>
+        <Image.Width>
+          <MultiBinding Converter="{StaticResource ExpressionMultiValueConverter}" ConverterParameter="{}{0} ? {1} : {2}">
+            <Binding RelativeSource="{RelativeSource Mode=FindAncestor,AncestorType={x:Type Button}}" Path="HasFocus"/>
+            <Binding Source="258"/>
+            <Binding Source="162"/>
+          </MultiBinding>
+        </Image.Width>
+      </Image>
+      <Image x:Name="Bling_horizontal" VerticalAlignment="Top" Stretch="Fill" HorizontalAlignment="Right" 
+             Height="4" Width="60" Grid.Row="0" Grid.Column="0" Source="Bling_hori.png" Margin="0,0,0,4"
+             IsVisible="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Button}, Path=HasFocus}">
+        <Image.RenderTransform>
+          <TranslateTransform X="0"/>
+        </Image.RenderTransform>
+        <Image.Triggers>
+          <DataTrigger Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Button}, Path=HasFocus}" Value="True">
+            <DataTrigger.EnterActions>
+              <BeginStoryboard x:Name="MoveRight_BeginStoryboard" Storyboard="{ThemeResource MoveRight}"/>
+            </DataTrigger.EnterActions>
+            <DataTrigger.ExitActions>
+              <StopStoryboard BeginStoryboardName="MoveRight_BeginStoryboard"/>
+            </DataTrigger.ExitActions>
+          </DataTrigger>
+        </Image.Triggers>
+      </Image>
+      <Image x:Name="Bling_vertical" VerticalAlignment="Top" Stretch="Fill" HorizontalAlignment="Right" 
+             Height="60" Width="4" Grid.Row="0" Grid.Column="0" Source="Bling_vert.png" Margin="0,0,-1,0" 
+             IsVisible="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Button}, Path=HasFocus}">
+        <Image.RenderTransform>
+          <TranslateTransform Y="0"/>
+        </Image.RenderTransform>
+        <Image.Triggers>
+          <DataTrigger Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Button}, Path=HasFocus}" Value="True">
+            <DataTrigger.EnterActions>
+              <BeginStoryboard x:Name="MoveDown_BeginStoryboard" Storyboard="{ThemeResource MoveDown}"/>
+            </DataTrigger.EnterActions>
+            <DataTrigger.ExitActions>
+              <StopStoryboard BeginStoryboardName="MoveDown_BeginStoryboard"/>
+            </DataTrigger.ExitActions>
+          </DataTrigger>
+        </Image.Triggers>
+      </Image>
+    </Grid>
   </DataTemplate>
 
   <Style x:Key="SubMenuListViewStyle" BasedOn="{ThemeResource DefaultListViewStyle}">

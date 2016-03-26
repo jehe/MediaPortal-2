@@ -37,7 +37,7 @@
       ContributorModelId="117A9807-8B10-47F1-8780-C748DBCF45BA"
       HelpText="[SlimTvClient.Recordings.Help]"/>  <!-- Recordings action -->
 
-    <!-- Custom home editor actions, only displayed by skins that support the home editor -->
+    <!-- Custom home actions, only displayed by supported skins -->
     <PushNavigationTransition Id="C5B14E9C-7F54-4B75-BEB0-8BE2EA1F4394"
       Name="Home->PowerMenu"
       DisplayCategory="A-HomeEditor"
