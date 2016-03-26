@@ -37,13 +37,22 @@
       ContributorModelId="117A9807-8B10-47F1-8780-C748DBCF45BA"
       HelpText="[SlimTvClient.Recordings.Help]"/>  <!-- Recordings action -->
 
+    <!-- Custom home editor actions, only displayed by skins that support the home editor -->
     <PushNavigationTransition Id="C5B14E9C-7F54-4B75-BEB0-8BE2EA1F4394"
       Name="Home->PowerMenu"
-      DisplayCategory="B-2PowerMenu"
+      DisplayCategory="A-HomeEditor"
       SortOrder="a"
-      SourceStates="7F702D9C-F2DD-42da-9ED8-0BA92F07787F"
+      SourceStates="B285DC02-AA8C-47F2-8795-0B13B6E66306"
       TargetState="BBFA7DB7-5055-48D5-A904-0F0C79849369"
       DisplayTitle="[SystemState.ShutdownDialogStateDisplayLabel]"/>
+    
+    <PushNavigationTransition Id="AEBAE6B5-71B3-4164-992F-296E2ACF8E5C"
+      Name="Home->HomeEditor"
+      DisplayCategory="A-HomeEditor"
+      SortOrder="b"
+      SourceStates="B285DC02-AA8C-47F2-8795-0B13B6E66306"
+      TargetState="BF7E11F6-87DE-4CB6-9A94-1A738CC52710"
+      DisplayTitle="[HomeEditor.Configuration]"/>
 
   </MenuActions>
 </Workflow>
