@@ -36,39 +36,24 @@
   </ResourceWrapper> 
 
   <ResourceWrapper x:Key="DialogHeaderColor" Resource="#FF3F5768"/>
-
   <ResourceWrapper x:Key="TextColor" Resource="White"/>
-
   <ResourceWrapper x:Key="HintTextColor" Resource="DarkGray"/>
-
   <ResourceWrapper x:Key="EmphasisTextColor" Resource="Yellow"/>
-
   <ResourceWrapper x:Key="ErrorTextColor" Resource="Orange"/>
-
+  
   <ResourceWrapper x:Key="ProgressBarBorderColor" Resource="#FFD3D3D3"/>
-
   <ResourceWrapper x:Key="ProgressBarFillColor" Resource="#FF6BB2BA"/>
 
   <ResourceWrapper x:Key="ButtonStrokeColor" Resource="#B0E0E0E0"/>
-
   <ResourceWrapper x:Key="ButtonGradientLightColor" Resource="#FF505050"/>
-
   <ResourceWrapper x:Key="ButtonGradientDarkColor" Resource="#FF303030"/>
-
   <ResourceWrapper x:Key="FocusedButtonGradientLightColor" Resource="#FF6B94AF"/>
-
   <ResourceWrapper x:Key="FocusedButtonGradientLighterColor" Resource="#FF959595"/>
-
   <ResourceWrapper x:Key="FocusedButtonGradientDarkColor" Resource="#FF606060"/>
-
   <ResourceWrapper x:Key="HighlightButtonStrokeColor" Resource="#FF6F99B7"/>
-
   <ResourceWrapper x:Key="PressedButtonGradientLight1Color" Resource="#FFB0B0B0"/>
-
   <ResourceWrapper x:Key="PressedButtonGradientLight2Color" Resource="#FFA0A0A0"/>
-
   <ResourceWrapper x:Key="PressedButtonGradientDark1Color" Resource="#FF808080"/>
-
   <ResourceWrapper x:Key="PressedButtonGradientDark2Color" Resource="#FF404040"/>
 
   <!-- Dark green -->
@@ -169,7 +154,7 @@
   <ResourceWrapper x:Key="CurrentMediaItemTimeColor" Resource="#A0FFFFFF"/>
 
   <!-- Dark yellow -->
-  <ResourceWrapper x:Key="ItemsControlShadowBackgroundColor" Resource="#FF1E1E00"/>
+  <ResourceWrapper x:Key="ItemsControlShadowBackgroundColor" Resource="Transparent"/>
 
   <!-- Dark gray, almost transparent -->
   <ResourceWrapper x:Key="ItemsControlDialogShadowBackgroundColor" Resource="#20111111"/>
@@ -278,19 +263,19 @@
 
   <ResourceWrapper x:Key="UpperShineGradient">
     <ResourceWrapper.Resource>
-      <LinearGradientBrush StartPoint="0.5,-0.3" EndPoint="0.5,0.4">
+      <!--LinearGradientBrush StartPoint="0,0" EndPoint="0.5,0.4">
         <GradientStop Color="{StaticResource ShineGradientStartColor}" Offset="0"/>
         <GradientStop Color="{StaticResource ShineGradientEndColor}" Offset="1"/>
-      </LinearGradientBrush>
+      </LinearGradientBrush-->
     </ResourceWrapper.Resource>
   </ResourceWrapper>
 
   <ResourceWrapper x:Key="LowerShineGradient">
     <ResourceWrapper.Resource>
-      <LinearGradientBrush StartPoint="0.5, 1.2" EndPoint="0.5,0.85">
+      <!--LinearGradientBrush StartPoint="0.5, 1.2" EndPoint="0.5,0.85">
         <GradientStop Color="{StaticResource ShineGradientStartColor}" Offset="0"/>
         <GradientStop Color="{StaticResource ShineGradientEndColor}" Offset="1"/>
-      </LinearGradientBrush>
+      </LinearGradientBrush-->
     </ResourceWrapper.Resource>
   </ResourceWrapper>
 
