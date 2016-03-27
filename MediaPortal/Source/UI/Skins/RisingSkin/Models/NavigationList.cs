@@ -61,10 +61,15 @@ namespace MediaPortal.UiComponents.RisingSkin.Models
 
     public void MoveNext()
     {
+      MoveNext(1);
+    }
+
+    public void MoveNext(int count)
+    {
       if (Count == 0)
         return;
       int oldIndex = CurrentIndex;
-      _current++;
+      _current+= count;
       if (_current >= Count)
         _current = 0;
       FireCurrentChanged(oldIndex);
@@ -72,10 +77,15 @@ namespace MediaPortal.UiComponents.RisingSkin.Models
 
     public void MovePrevious()
     {
+      MovePrevious(1);
+    }
+
+    public void MovePrevious(int count)
+    {
       if (Count == 0)
         return;
       int oldIndex = CurrentIndex;
-      _current--;
+      _current -= count;
       if (_current < 0)
         _current = Count - 1;
       FireCurrentChanged(oldIndex);

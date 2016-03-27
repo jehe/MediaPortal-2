@@ -41,6 +41,7 @@ using System.Collections.Generic;
 using HomeEditor.Groups;
 using MediaPortal.Common.Services.Settings;
 using MediaPortal.Common.Localization;
+using MediaPortal.UI.SkinEngine.MpfElements.Input;
 
 namespace MediaPortal.UiComponents.RisingSkin.Models
 {
@@ -159,6 +160,14 @@ namespace MediaPortal.UiComponents.RisingSkin.Models
     public void OnKeyPress(object sender, KeyPressEventArgs e)
     {
 
+    }
+
+    public void OnMouseWheel(object sender, MouseWheelEventArgs e)
+    {
+      if (e.NumDetents > 0)
+        _navigationList.MovePrevious(e.NumDetents);
+      else
+        _navigationList.MoveNext(-e.NumDetents);
     }
 
     public HomeMenuModel()

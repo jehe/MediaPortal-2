@@ -4,6 +4,7 @@
     PluginId="{77D2381E-2591-43d6-85B5-9EF77E95E9DB}"
     Author="Morpheus_xx"
     Copyright="GPL"
+    AutoActivate="true"
     Description="Rising Skin for MP2.">
 
   <Version
