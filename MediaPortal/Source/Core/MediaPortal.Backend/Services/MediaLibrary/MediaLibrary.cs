@@ -2523,20 +2523,19 @@ namespace MediaPortal.Backend.Services.MediaLibrary
 
     private void InitShareWatchers()
     {
-      try
+      IDictionary<Guid, Share> shares = GetShares(_localSystemId);
+      foreach (Share share in shares.Values)
       {
-        IDictionary<Guid, Share> shares = GetShares(_localSystemId);
-        foreach(Share share in shares.Values)
+        try
         {
           ShareWatcher watcher = new ShareWatcher(share, this);
           watcher.OnShareChange += Watcher_OnShareChange;
           _shareWatchers.Add(share.ShareId, watcher);
         }
-      }
-      catch (Exception e)
-      {
-        Logger.Error("MediaLibrary: Error initializing shares", e);
-        throw;
+        catch (Exception e)
+        {
+          Logger.Error("MediaLibrary: Error initializing share watcher for {0}", e, share.BaseResourcePath);
+        }
       }
     }
 
